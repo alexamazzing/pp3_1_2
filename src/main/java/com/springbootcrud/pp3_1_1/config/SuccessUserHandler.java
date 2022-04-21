@@ -1,7 +1,9 @@
 package com.springbootcrud.pp3_1_1.config;
 
+import com.springbootcrud.pp3_1_1.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -22,11 +24,11 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         if (roles.contains("ROLE_ADMIN")) {
             httpServletResponse.sendRedirect("/admin");
         } else {
-            httpServletResponse.sendRedirect("/user");
-            /*Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if (principal instanceof UserDetails) {
-                httpServletResponse.sendRedirect(String.format("/user/%d", principal.get);
-            }*/
+            //httpServletResponse.sendRedirect("/user");
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (principal instanceof User) {
+                httpServletResponse.sendRedirect(String.format("/user/%s",((User) principal).getId()));
+            }
         }
     }
 }

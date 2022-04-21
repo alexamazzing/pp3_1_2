@@ -5,7 +5,7 @@
     <title>Add new user</title>
 </head>
 <body>
-<form th:method="post" th:action="@{/admin/}" th:object="${user}">
+<form th:method="post" th:action="@{/admin/new}" th:object="${user}">
     <table>
         <tbody>
         <tr>
@@ -30,6 +30,20 @@
             <td>E-mail:</td>
             <td>
                 <input type="text" th:field="*{email}">
+            </td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <input type="password" th:field="*{password}">
+            </td>
+        </tr>
+        <tr>
+            <td>Roles:</td>
+            <td>
+                <div th:each="role : ${roles}">
+                    <input type="checkbox" th:field="*{roles}" th:value="${role.getId()}" /><label th:text="${role.getName()}">example</label>
+                </div>
             </td>
         </tr>
         </tbody>

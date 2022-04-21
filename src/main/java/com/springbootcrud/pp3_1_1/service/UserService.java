@@ -22,11 +22,14 @@ public class UserService implements UserDetailsService {
     @Autowired
     RoleDAO roleDAO;
 
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userDAO.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userDAO.findByEmail(email);
+        if (user == null) {
+            return null;
+        }
         return user;
     }
 
@@ -40,17 +43,10 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean saveUser(User user) {
-        User userFromDB = userDAO.findByEmail(user.getEmail()).orElse(null);
-
-        if (userFromDB != null) {
-            return false;
-        }
-
         Set<Role> roles = user.getRoles();
         if (roles.size() == 0) {
             user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         }
-
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userDAO.save(user);
         return true;
