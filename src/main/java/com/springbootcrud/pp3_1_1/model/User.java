@@ -112,8 +112,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-//    public static UserDetails fromUser(User user) {
-//        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.getRoles());
-//    }
 }
