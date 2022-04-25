@@ -4,6 +4,7 @@ import com.springbootcrud.pp3_1_1.model.User;
 import com.springbootcrud.pp3_1_1.service.RoleService;
 import com.springbootcrud.pp3_1_1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,27 +24,18 @@ public class AdminController {
 
     @GetMapping()
     public String adminPage(Model model) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("users", userService.findAll());
-        return "admin";
-    }
-
-    @GetMapping("/new")
-    public String newUser(@ModelAttribute("user") User user, Model model) {
         model.addAttribute("roles", roleService.getAllRoles());
-        return "new";
+        model.addAttribute("user", user);
+        model.addAttribute("new_user", new User());
+        return "admin";
     }
 
     @PostMapping("/new")
     public String addUser(User user) {
         userService.saveUser(user);
         return "redirect:/admin";
-    }
-    @GetMapping("/{id}/edit")
-    public String editUser(Model model, @PathVariable("id") long id) {
-        User user = userService.findById(id);
-        model.addAttribute("user", user);
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "edit";
     }
 
     @PostMapping("/{id}/edit")

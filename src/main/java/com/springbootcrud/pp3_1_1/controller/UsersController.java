@@ -27,6 +27,7 @@ public class UsersController {
     @GetMapping("/{id}")
     public String userPage(@PathVariable Long id, Model model) {
         User user = userService.findById(id);
+        model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("user", user);
         return "user";
     }
