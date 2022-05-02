@@ -121,7 +121,6 @@ const showEditModal = (user) => {
             password: pass,
             roles: selected
         }
-        console.log(data)
         fetch(url, {
             method: 'PUT',
             headers: {
